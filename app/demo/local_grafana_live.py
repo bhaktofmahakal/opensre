@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import argparse
 import time
-from typing import Any
+from typing import Any, cast
 
 import requests
 from dotenv import load_dotenv
@@ -135,10 +135,10 @@ def run_demo(argv: list[str] | None = None) -> str:
     evidence = fetch_live_grafana_evidence()
     state = prepare_demo_state(evidence)
 
-    diagnosis = diagnose_root_cause(state)
+    diagnosis = cast(InvestigationState, diagnose_root_cause(state))
     state.update(diagnosis)
 
-    report = generate_report(state)["slack_message"]
+    report = str(generate_report(state)["slack_message"])
     if args.output:
         from pathlib import Path
 
