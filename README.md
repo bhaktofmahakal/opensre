@@ -381,6 +381,13 @@ Thanks goes to these amazing people:
             <sub><b>devankitjuneja</b></sub>
         </a>
     </td>
+            <td align="center">
+        <a href="https://github.com/qorexdev">
+            <img src="https://avatars.githubusercontent.com/u/248982649?v=4" width="100;" alt="qorexdev"/>
+            <br />
+            <sub><b>qorexdev</b></sub>
+        </a>
+    </td>
 		</tr>
 	</tbody>
 </table>
