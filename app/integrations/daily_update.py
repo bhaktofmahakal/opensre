@@ -22,7 +22,7 @@ from app.version import get_version
 GITHUB_API_BASE_URL = "https://api.github.com"
 GITHUB_API_VERSION = "2022-11-28"
 LONDON_TZ = ZoneInfo("Europe/London")
-DEFAULT_OUTPUT_DIR = "docs-mintlify/daily-updates"
+DEFAULT_OUTPUT_DIR = "docs/daily-updates"
 MAX_PROMPT_FILES = 25
 MAX_PROMPT_BODY_CHARS = 1200
 MAX_HIGHLIGHTS = 8
@@ -487,7 +487,7 @@ def build_daily_update(repository: str, window: DailyWindow, pull_requests: tupl
 
 
 def render_markdown(update: DailyUpdate) -> str:
-    """Render a committed MDX archive document for docs-mintlify/daily-updates."""
+    """Render a committed MDX archive document for docs/daily-updates."""
     london_date = update.window.london_date.isoformat()
     lines = [
         "---",
@@ -578,7 +578,7 @@ def regenerate_overview(output_dir: Path) -> Path:
 
 
 def write_daily_archive(update: DailyUpdate, *, output_dir: Path | None = None) -> Path:
-    """Persist the generated MDX archive under docs-mintlify/daily-updates."""
+    """Persist the generated MDX archive under docs/daily-updates."""
     target_dir = output_dir or _output_dir()
     target_dir.mkdir(parents=True, exist_ok=True)
     archive_path = target_dir / f"{update.window.london_date.isoformat()}.mdx"
