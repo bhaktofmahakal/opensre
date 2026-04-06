@@ -13,7 +13,6 @@ import uuid
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Final
-from typing_extensions import TypeAlias
 
 import httpx
 
@@ -31,8 +30,8 @@ _QUEUE_SIZE = 128
 _SEND_TIMEOUT = 2.0
 _SHUTDOWN_WAIT = 1.0
 
-PropertyValue: TypeAlias = "str | bool"
-Properties: TypeAlias = "dict[str, PropertyValue]"
+type PropertyValue = str | bool
+type Properties = dict[str, PropertyValue]
 
 
 @dataclass(frozen=True, slots=True)
