@@ -111,6 +111,8 @@ class CliSandbox:
 
 
 def _clean_terminal_output(text: str) -> str:
+    if not text:
+        return ""
     cleaned = _ANSI_RE.sub("", text)
     cleaned = cleaned.replace("\r", "\n").replace("\x00", "")
     cleaned = re.sub(r"\n{3,}", "\n\n", cleaned)
@@ -153,6 +155,7 @@ def _cli_env(home: Path, project_env_path: Path) -> dict[str, str]:
     env["OPENSRE_NO_TELEMETRY"] = "1"
     env["OPENSRE_PROJECT_ENV_PATH"] = str(project_env_path)
     env["PYTHONUTF8"] = "1"
+    env["PYTHONIOENCODING"] = "utf-8"
     env["TERM"] = "xterm-256color"
     env.pop("OPENSRE_DISABLE_KEYRING", None)
     env["PYTHON_KEYRING_BACKEND"] = "tests.shared.keyring_backend.MemoryKeyring"
@@ -192,6 +195,8 @@ def _run_cli(
         env=env,
         capture_output=True,
         text=True,
+        encoding="utf-8",
+        errors="replace",
         timeout=timeout,
         check=False,
     )
