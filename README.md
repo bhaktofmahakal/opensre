@@ -17,7 +17,6 @@
   <a href="https://discord.gg/7NTpevXf7w"><img src="https://img.shields.io/badge/Discord-Join%20Us-5865F2?style=flat-square&logo=discord&logoColor=white" alt="Discord"></a>
  
 </p>
-<br />
 <a href="https://trendshift.io/repositories/25889" target="_blank">
   <img
     src="https://trendshift.io/api/badge/repositories/25889"
