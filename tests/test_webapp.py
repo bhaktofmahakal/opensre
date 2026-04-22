@@ -2,9 +2,10 @@ from __future__ import annotations
 
 import pytest
 from fastapi.testclient import TestClient
+from pydantic import ValidationError
 
 from app.config import Environment
-from app.webapp import app
+from app.webapp import _llm_configured, app
 
 
 @pytest.fixture
@@ -69,3 +70,44 @@ def test_health_payload_has_stable_keys(
         "ok",
         "version",
     ]
+
+
+def test_llm_configured_returns_false_for_misconfiguration(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """ValidationError from bad LLM config should return False, not raise."""
+    monkeypatch.setattr(
+        "app.webapp.LLMSettings.from_env",
+        lambda: (_ for _ in ()).throw(
+            ValidationError.from_exception_data(
+                title="LLMSettings",
+                input_type="python",
+                line_errors=[
+                    {
+                        "type": "value_error",
+                        "loc": ("provider",),
+                        "msg": "Value error, Unsupported LLM provider",
+                        "input": "bad-provider",
+                        "ctx": {"error": ValueError("Unsupported LLM provider")},
+                    }
+                ],
+            )
+        ),
+    )
+
+    assert _llm_configured() is False
+
+
+def test_llm_configured_reraises_unexpected_exception(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Non-configuration exceptions must not be silently converted to False."""
+
+    def _boom() -> None:
+        raise RuntimeError("unexpected internal failure")
+
+    monkeypatch.setattr("app.webapp.LLMSettings.from_env", _boom)
+
+    with pytest.raises(RuntimeError, match="unexpected internal failure"):
+        _llm_configured()
+

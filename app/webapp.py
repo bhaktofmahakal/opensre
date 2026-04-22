@@ -1,12 +1,15 @@
 from __future__ import annotations
 
+import logging
 import sys
 
 from fastapi import FastAPI, Response, status
-from pydantic import BaseModel
+from pydantic import BaseModel, ValidationError
 
 from app.config import LLMSettings, get_environment
 from app.version import get_version
+
+logger = logging.getLogger(__name__)
 
 
 class HealthResponse(BaseModel):
@@ -27,8 +30,11 @@ def _graph_loaded() -> bool:
 def _llm_configured() -> bool:
     try:
         LLMSettings.from_env()
-    except Exception:
+    except ValidationError:
         return False
+    except Exception:
+        logger.exception("Unexpected error while checking LLM configuration")
+        raise
     return True
 
 
